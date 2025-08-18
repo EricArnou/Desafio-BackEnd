@@ -1,4 +1,5 @@
 namespace moto_rent.Features.Riders;
+using moto_rent.Features.Rentals;
 public class Rider
 {
     public int Id { get; set; }
@@ -13,4 +14,5 @@ public class Rider
         B,
         AB
     }
+    public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
 }
