@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "6OFagzjkJ9I=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\OPs-Atendimento\\Desktop\\Desafio Técnico\\moto-rent\\moto-rent.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\OPs-Atendimento\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.8\\microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
+    "C:\\Users\\OPs-Atendimento\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

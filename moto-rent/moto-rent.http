@@ -1,0 +1,6 @@
+@moto_rent_HostAddress = http://localhost:5263
+
+GET {{moto_rent_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
