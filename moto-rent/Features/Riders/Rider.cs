@@ -1,5 +1,10 @@
-namespace moto_rent.Features.Riders;
+using Microsoft.EntityFrameworkCore;
 using moto_rent.Features.Rentals;
+
+namespace moto_rent.Features.Riders;
+
+[Index(nameof(Cnpj), IsUnique = true)]
+[Index(nameof(Cnh), IsUnique = true)]
 public class Rider
 {
     public int Id { get; set; }

@@ -22,6 +22,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.Urls.Add("http://localhost:5000");
+app.Urls.Add("https://localhost:5001");
+
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

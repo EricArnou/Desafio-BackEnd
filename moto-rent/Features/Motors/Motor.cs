@@ -1,5 +1,9 @@
 namespace moto_rent.Features.Motors;
+
 using moto_rent.Features.Rentals;
+using Microsoft.EntityFrameworkCore;
+
+[Index(nameof(LicensePlate), IsUnique = true)]
 
 public class Motor
 {
