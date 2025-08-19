@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using moto_rent.Features.Motors;
 using moto_rent.Persistence;
+using moto_rent.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<MotorRepository>();
+builder.Services.AddScoped<MotorService>();
 
 var app = builder.Build();
 

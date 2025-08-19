@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 public class Motor
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public int Year { get; set; }
     public string Model { get; set; } = string.Empty;
     public string LicensePlate { get; set; } = string.Empty;
