@@ -1,7 +1,6 @@
 // Data/Repositories/MotorRepository.cs
 using moto_rent.Persistence;
 using Microsoft.EntityFrameworkCore;
-using moto_rent.Features.Motors; // Add this if IMotorRepository is defined in this namespace
 
 namespace moto_rent.Features.Motors
 {
