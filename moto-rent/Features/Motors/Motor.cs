@@ -10,21 +10,30 @@ using moto_rent.Features.Motors.DTOs;
 public class Motor
 {
 
+    public Motor() {}
+
     [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString("N");
-    public int Year { get; set; }
-    public string Model { get; set; } = string.Empty;
-    public string LicensePlate { get; set; } = string.Empty;
-    public bool IsAvailable { get; set; } = true;
+    public string Id { get; private set; } = Guid.NewGuid().ToString("N");
+    public int Year { get; private set; }
+    public string Model { get; private set; } = string.Empty;
+    public string LicensePlate { get; private set; } = string.Empty;
+    public bool IsAvailable { get; private set; } = true;
 
     public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
 
-    public Motor(MotorDto motor)
+    public static Motor FromDto(MotorDto motor)
     {
-        this.Id = motor.Id;
-        this.Year = motor.Year;
-        this.Model = motor.Model;
-        this.LicensePlate = motor.LicensePlate;
+        return new Motor
+        {
+            Id = motor.identificador,
+            Year = motor.ano,
+            Model = motor.modelo,
+            LicensePlate = motor.placa
+        };
     }
 
+    public void SetLicensePlate(string newLicensePlate)
+    {
+        this.LicensePlate = newLicensePlate;
+    }
 }

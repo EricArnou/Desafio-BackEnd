@@ -13,7 +13,7 @@ namespace moto_rent.Services
             _repository = repository;
         }
 
-        public async Task<Motor?> GetMotorByIdAsync(string id)
+        public async Task<MotorDto?> GetMotorByIdAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
                 throw new ArgumentException("Id is required");
@@ -23,21 +23,22 @@ namespace moto_rent.Services
             if (motor == null)
                 throw new KeyNotFoundException("id not found");
                 
-            return motor;
+            return new MotorDto(motor);
         }
 
-        public async Task<List<Motor>> GetAllMotorsAsync()
+        public async Task<List<MotorDto>> GetAllMotorsAsync()
         {
-            return await _repository.GetAllMotorsAsync();
+            var motors = await _repository.GetAllMotorsAsync();
+            return motors.Select(m => new MotorDto(m)).ToList();
         }
 
         public async Task CreateMotorAsync(MotorDto motor)
         {
             // validações de negócio
-            if (string.IsNullOrWhiteSpace(motor.LicensePlate))
+            if (string.IsNullOrWhiteSpace(motor.placa))
                 throw new ArgumentException("License plate is required");
 
-            await _repository.AddMotorAsync(new Motor(motor));
+            await _repository.AddMotorAsync(Motor.FromDto(motor));
         }
 
         public async Task UpdateMotorAsync(string id, string newLicensePlate)

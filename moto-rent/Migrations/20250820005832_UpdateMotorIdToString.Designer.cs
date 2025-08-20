@@ -12,8 +12,8 @@ using moto_rent.Persistence;
 namespace moto_rent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250818231640_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250820005832_UpdateMotorIdToString")]
+    partial class UpdateMotorIdToString
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,11 +27,8 @@ namespace moto_rent.Migrations
 
             modelBuilder.Entity("moto_rent.Features.Motors.Motor", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("boolean");
@@ -69,11 +66,13 @@ namespace moto_rent.Migrations
                     b.Property<DateTime>("ExpectedRentalEndDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("MotorId")
-                        .HasColumnType("integer");
+                    b.Property<string>("MotorId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
-                    b.Property<int>("RiderId")
-                        .HasColumnType("integer");
+                    b.Property<string>("RiderId")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("StartRentalDate")
                         .HasColumnType("timestamp with time zone");
@@ -89,11 +88,8 @@ namespace moto_rent.Migrations
 
             modelBuilder.Entity("moto_rent.Features.Riders.Rider", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("BirthDate")
                         .HasColumnType("timestamp with time zone");

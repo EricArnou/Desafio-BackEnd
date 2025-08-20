@@ -2,14 +2,22 @@ namespace moto_rent.Features.Motors.DTOs
 {
     public class MotorDto
     {
-        public string Id { get; set; } = Guid.NewGuid().ToString("N");
-        public int Year { get; set; }
-        public string Model { get; set; }
-        public string LicensePlate { get; set; }
+
+        public MotorDto(Motor motor)
+        {
+            identificador = motor.Id;
+            ano = motor.Year;
+            modelo = motor.Model;
+            placa = motor.LicensePlate;
+        }
+        public string identificador { get; set; } = Guid.NewGuid().ToString("N");
+        public int ano { get; set; }
+        public string modelo { get; set; }
+        public string placa { get; set; }
     }
 
     public class UpdateMotorDto
     {
-        public string LicensePlate { get; set; }
+        public string placa { get; set; }
     }
 }

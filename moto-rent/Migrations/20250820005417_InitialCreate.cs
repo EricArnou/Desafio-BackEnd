@@ -16,8 +16,7 @@ namespace moto_rent.Migrations
                 name: "Motors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Year = table.Column<int>(type: "integer", nullable: false),
                     Model = table.Column<string>(type: "text", nullable: false),
                     LicensePlate = table.Column<string>(type: "text", nullable: false),
@@ -32,8 +31,7 @@ namespace moto_rent.Migrations
                 name: "Riders",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     Cnpj = table.Column<string>(type: "text", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -50,8 +48,8 @@ namespace moto_rent.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    RiderId = table.Column<int>(type: "integer", nullable: false),
-                    MotorId = table.Column<int>(type: "integer", nullable: false),
+                    RiderId = table.Column<string>(type: "text", nullable: false),
+                    MotorId = table.Column<string>(type: "text", nullable: false),
                     StartRentalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndRentalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ExpectedRentalEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)

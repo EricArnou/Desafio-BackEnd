@@ -8,7 +8,7 @@ using moto_rent.Features.Motors.DTOs;
 namespace moto_rent.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("/motos")]
     public class MotorsController : ControllerBase
     {
         private readonly MotorService _service;
@@ -46,8 +46,15 @@ namespace moto_rent.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMotor([FromBody] MotorDto motor)
         {
-            await _service.CreateMotorAsync(motor);
-            return CreatedAtAction(nameof(GetMotor), new { id = motor.Id }, motor);
+            try
+            {
+                await _service.CreateMotorAsync(motor);
+                return NoContent();
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest(new Message("Dados inválidos"));
+            }
         }
 
         [HttpPut("{id}/placa")]
@@ -56,7 +63,7 @@ namespace moto_rent.Controllers
 
             try
             {
-                await _service.UpdateMotorAsync(id, motor.LicensePlate);
+                await _service.UpdateMotorAsync(id, motor.placa);
                 return Ok(new Message("Placa modificada com sucesso"));
             }
             catch (ArgumentException)
