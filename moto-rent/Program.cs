@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using moto_rent.Features.Motors;
+using moto_rent.Features.Rentals;
 using moto_rent.Features.Riders;
 using moto_rent.Features.Riders.Services;
 using moto_rent.Persistence;
@@ -20,6 +21,8 @@ builder.Services.AddScoped<MotorRepository>();
 builder.Services.AddScoped<MotorService>();
 builder.Services.AddScoped<RiderService>();
 builder.Services.AddScoped<IRiderRepository, RiderRepository>();
+builder.Services.AddScoped<IRentalRepository, RentalRepository>();
+
 
 var app = builder.Build();
 
