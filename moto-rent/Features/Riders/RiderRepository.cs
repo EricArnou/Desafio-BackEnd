@@ -5,7 +5,7 @@ namespace moto_rent.Features.Riders
 {
     public interface IRiderRepository
     {
-        Task AddAsync(Rider rider);
+        Task AddRiderAsync(Rider rider);
         Task<bool> CnpjExistsAsync(string cnpj);
         Task<bool> CnhNumberExistsAsync(string cnhNumber);
     }
@@ -18,7 +18,7 @@ namespace moto_rent.Features.Riders
             _context = context;
         }
 
-        public async Task AddAsync(Rider rider)
+        public async Task AddRiderAsync(Rider rider)
         {
             _context.Riders.Add(rider);
             await _context.SaveChangesAsync();
