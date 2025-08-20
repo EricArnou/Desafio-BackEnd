@@ -9,11 +9,11 @@ namespace moto_rent.Features.Riders;
 public class Rider
 {
     [Key]
-    public string Id { get; set; } = Guid.NewGuid().ToString("N");
-    public string Name { get; set; } = string.Empty;
-    public string Cnpj { get; set; } = string.Empty;
-    public DateTime BirthDate { get; set; }
-    public string Cnh { get; set; } = string.Empty;
+    public string Id { get; private set; } = Guid.NewGuid().ToString("N");
+    public string Name { get; private set; } = string.Empty;
+    public string Cnpj { get; private set; } = string.Empty;
+    public DateTime BirthDate { get; private set; }
+    public string Cnh { get; private set; } = string.Empty;
 
     public enum CnhCategory
     {
@@ -21,5 +21,7 @@ public class Rider
         B,
         AB
     }
-    public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
+
+    public string ImageCnh { get; private set; } = string.Empty;
+    public ICollection<Rental> Rentals { get; private set; } = new List<Rental>();
 }
