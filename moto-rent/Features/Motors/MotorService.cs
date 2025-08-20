@@ -32,7 +32,7 @@ namespace moto_rent.Services
             return motors.Select(m => new MotorDto(m)).ToList();
         }
 
-        public async Task CreateMotorAsync(MotorDto motor)
+        public async Task<MotorDto> CreateMotorAsync(MotorDto motor)
         {
             // validações de negócio
             if (string.IsNullOrWhiteSpace(motor.placa))
@@ -41,7 +41,10 @@ namespace moto_rent.Services
             if (await _repository.GetLicensePlateAsync(motor.placa))
                 throw new ArgumentException("License plate already exists");
 
-            await _repository.AddMotorAsync(Motor.FromDto(motor));
+            var motorEntity = Motor.FromDto(motor);
+            await _repository.AddMotorAsync(motorEntity);
+
+            return new MotorDto(motorEntity);
         }
 
         public async Task UpdateMotorAsync(string id, string newLicensePlate)

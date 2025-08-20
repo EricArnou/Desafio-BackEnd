@@ -49,7 +49,7 @@ namespace moto_rent.Controllers
             try
             {
                 await _service.CreateMotorAsync(motor);
-                return NoContent();
+                return Created();
             }
             catch (ArgumentException)
             {
@@ -83,7 +83,7 @@ namespace moto_rent.Controllers
             try
             {
                 await _service.DeleteMotorAsync(id);
-                return NoContent();
+                return Ok();
             }
             catch (ArgumentException)
             {
