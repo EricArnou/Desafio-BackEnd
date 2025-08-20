@@ -8,6 +8,7 @@ namespace moto_rent.Features.Riders
         Task AddRiderAsync(Rider rider);
         Task<bool> CnpjExistsAsync(string cnpj);
         Task<bool> CnhNumberExistsAsync(string cnhNumber);
+        Task<Rider?> GetRiderByIdAsync(string id);
     }
     public class RiderRepository : IRiderRepository
     {
@@ -32,6 +33,11 @@ namespace moto_rent.Features.Riders
         public async Task<bool> CnhNumberExistsAsync(string cnhNumber)
         {
             return await _context.Riders.AnyAsync(r => r.Cnh == cnhNumber);
+        }
+
+        public async Task<Rider?> GetRiderByIdAsync(string id)
+        {
+            return await _context.Riders.FindAsync(id);
         }
     }
 }

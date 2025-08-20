@@ -4,7 +4,7 @@ namespace moto_rent.Features.Rentals
 {
     public interface IRentalRepository
     {
-        Task<Rental?> GetRentalByIdAsync(Guid id);
+        Task<Rental?> GetRentalByIdAsync(string id);
         Task CreateRentalAsync(Rental rental);
         Task UpdateRentalAsync(Rental rental);
     }
@@ -17,7 +17,7 @@ namespace moto_rent.Features.Rentals
             _context = context;
         }
 
-        public async Task<Rental?> GetRentalByIdAsync(Guid id)
+        public async Task<Rental?> GetRentalByIdAsync(string id)
         {
             return await _context.Rentals.FindAsync(id);
         }
