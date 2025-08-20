@@ -19,9 +19,21 @@ namespace moto_rent.Features.Rentals.Services
             _riderRepository = riderRepository;
         }
 
-        public async Task<Rental?> GetRentalByIdAsync(string id)
+        public async Task<RentalDto> GetRentalByIdAsync(string id)
         {
-            return await _rentalRepository.GetRentalByIdAsync(id);
+            if (string.IsNullOrEmpty(id))
+            {
+                throw new ArgumentException("id is required");
+            }
+
+            var rental = await _rentalRepository.GetRentalByIdAsync(id);
+            
+            if (rental == null)
+            {
+                throw new KeyNotFoundException("id not found");
+            }
+
+            return new RentalDto(rental);
         }
 
         public async Task<RentalDto> CreateRentalAsync(CreateRentalDto rentalDto)
