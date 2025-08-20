@@ -10,7 +10,7 @@ using moto_rent.Features.Motors.DTOs;
 public class Motor
 {
 
-    public Motor() {}
+    public Motor() { }
 
     [Key]
     public string Id { get; private set; } = Guid.NewGuid().ToString("N");
@@ -34,6 +34,11 @@ public class Motor
 
     public void SetLicensePlate(string newLicensePlate)
     {
-        this.LicensePlate = newLicensePlate;
+        LicensePlate = newLicensePlate;
+    }
+    
+    public void SetAvailability(bool isAvailable)
+    {
+        IsAvailable = isAvailable;
     }
 }

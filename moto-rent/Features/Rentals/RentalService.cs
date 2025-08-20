@@ -47,6 +47,11 @@ namespace moto_rent.Features.Rentals.Services
                 throw new ArgumentException("Motor not found for the given moto_id.");
             }
 
+            if(motor.IsAvailable == false)
+            {
+                throw new ArgumentException("Motor is not available for rental.");
+            }
+
             rental.Motor = motor;
 
             var rider = await _riderRepository.GetRiderByIdAsync(rentalDto.entregador_id);
@@ -59,6 +64,8 @@ namespace moto_rent.Features.Rentals.Services
             rental.Rider = rider;
 
             await _rentalRepository.CreateRentalAsync(rental);
+
+            rental.Motor.SetAvailability(false);
             return new RentalDto(rental);
         }
 
@@ -76,6 +83,7 @@ namespace moto_rent.Features.Rentals.Services
                 existing.EndRentalDate = rental.data_termino.Value;
             }
 
+            existing.TotalPrice = CalculateRentalPrice(existing);
             await _rentalRepository.UpdateRentalAsync(existing);
 
             return new RentalDto(existing);

@@ -12,7 +12,7 @@ namespace moto_rent.Features.Riders.DTOs
         public DateTime data_inicio { get; set; }
         public DateTime data_termino { get; set; }
         public DateTime data_prevista_termino { get; set; }
-        public string plano { get; set; } = string.Empty;
+        public int plano { get; set; } = 0;
     }
     public class RentalDto
     {

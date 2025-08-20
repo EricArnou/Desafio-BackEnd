@@ -30,7 +30,7 @@ public class Rental
             StartRentalDate = dto.data_inicio,
             EndRentalDate = dto.data_termino,
             ExpectedRentalEndDate = dto.data_prevista_termino,
-            RentalPlan = Enum.Parse<RentalPlans>(dto.plano),
+            RentalPlan = (RentalPlans)dto.plano
         };
     }
 }
