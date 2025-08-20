@@ -1,4 +1,3 @@
-// Data/Repositories/MotorRepository.cs
 using moto_rent.Persistence;
 using Microsoft.EntityFrameworkCore;
 

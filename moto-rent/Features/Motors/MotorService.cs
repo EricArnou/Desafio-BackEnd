@@ -1,4 +1,3 @@
-// Services/MotorService.cs
 using moto_rent.Features.Motors;
 using moto_rent.Features.Motors.DTOs;
 
@@ -32,9 +31,8 @@ namespace moto_rent.Services
             return motors.Select(m => new MotorDto(m)).ToList();
         }
 
-        public async Task<MotorDto> CreateMotorAsync(MotorDto motor)
+        public async Task CreateMotorAsync(MotorDto motor)
         {
-            // validações de negócio
             if (string.IsNullOrWhiteSpace(motor.placa))
                 throw new ArgumentException("License plate is required");
 
@@ -44,7 +42,6 @@ namespace moto_rent.Services
             var motorEntity = Motor.FromDto(motor);
             await _repository.AddMotorAsync(motorEntity);
 
-            return new MotorDto(motorEntity);
         }
 
         public async Task UpdateMotorAsync(string id, string newLicensePlate)

@@ -1,6 +1,4 @@
-// Controllers/MotorsController.cs
 using Microsoft.AspNetCore.Mvc;
-using moto_rent.Features.Motors;
 using moto_rent.Services;
 using moto_rent.Infraestructure.Exceptions;
 using moto_rent.Features.Motors.DTOs;
@@ -19,7 +17,7 @@ namespace moto_rent.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetMotor(string id)
+        public async Task<IActionResult> GetMotorMotorById(string id)
         {
             try
             {
