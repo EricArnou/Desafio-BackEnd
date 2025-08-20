@@ -8,6 +8,9 @@ namespace moto_rent.Features.Riders;
 [Index(nameof(Cnh), IsUnique = true)]
 public class Rider
 {
+
+    public Rider() { }
+
     [Key]
     public string Id { get; private set; } = Guid.NewGuid().ToString("N");
     public string Name { get; private set; } = string.Empty;
@@ -15,12 +18,7 @@ public class Rider
     public DateTime BirthDate { get; private set; }
     public string Cnh { get; private set; } = string.Empty;
 
-    public enum CnhCategory
-    {
-        A,
-        B,
-        AB
-    }
+    public CnhCategory CnhCategory { get; private set; }
 
     public string ImageCnh { get; private set; } = string.Empty;
     public ICollection<Rental> Rentals { get; private set; } = new List<Rental>();
