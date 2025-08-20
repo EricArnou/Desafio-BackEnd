@@ -1,10 +1,21 @@
 // Data/Repositories/MotorRepository.cs
 using moto_rent.Persistence;
 using Microsoft.EntityFrameworkCore;
+using moto_rent.Features.Motors; // Add this if IMotorRepository is defined in this namespace
 
 namespace moto_rent.Features.Motors
 {
-    public class MotorRepository
+    public interface IMotorRepository
+    {
+        Task<Motor?> GetMotorByIdAsync(string id);
+        Task<List<Motor>> GetAllMotorsAsync();
+        Task AddMotorAsync(Motor motor);
+        Task UpdateMotorAsync(Motor motor);
+        Task DeleteMotorAsync(Motor motor);
+        Task<bool> GetLicensePlateAsync(string licensePlate);
+    }
+
+    public class MotorRepository : IMotorRepository
     {
         private readonly AppDbContext _context;
 
