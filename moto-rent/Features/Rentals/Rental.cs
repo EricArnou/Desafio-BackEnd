@@ -7,10 +7,10 @@ public class Rental
 {
     public int Id { get; set; }
 
-    public int RiderId { get; set; }
+    public string RiderId { get; set; } = null!;
     public Rider Rider { get; set; } = null!;
 
-    public int MotorId { get; set; }
+    public string MotorId { get; set; } = null!;
     public Motor Motor { get; set; } = null!;
 
     public DateTime StartRentalDate { get; set; }

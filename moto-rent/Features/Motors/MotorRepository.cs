@@ -13,7 +13,7 @@ namespace moto_rent.Features.Motors
             _context = context;
         }
 
-        public async Task<Motor?> GetMotorByIdAsync(Guid id)
+        public async Task<Motor?> GetMotorByIdAsync(string id)
         {
             return await _context.Motors.FindAsync(id);
         }

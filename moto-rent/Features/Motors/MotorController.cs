@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using moto_rent.Features.Motors;
 using moto_rent.Services;
+using moto_rent.Infraestructure.Exceptions;
 
 namespace moto_rent.Controllers
 {
@@ -19,8 +20,19 @@ namespace moto_rent.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMotor(string id)
         {
-            var motor = await _service.GetMotorByIdAsync(id);
-            return motor == null ? NotFound() : Ok(motor);
+            try
+            {
+                var motor = await _service.GetMotorByIdAsync(id);
+                return Ok(motor);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest(new Message("Request mal formada"));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new Message("Moto não encontrado"));
+            }
         }
 
         [HttpGet]
@@ -40,15 +52,39 @@ namespace moto_rent.Controllers
         [HttpPut("{id}/placa")]
         public async Task<IActionResult> UpdateMotor(string id, [FromBody] string licensePlate)
         {
-            await _service.UpdateMotorAsync(id, licensePlate);
-            return NoContent();
+
+            try
+            {
+                await _service.UpdateMotorAsync(id, licensePlate);
+                return Ok(new Message("Placa modificada com sucesso"));
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest(new Message("Dados inválidos"));
+            }
+            catch (KeyNotFoundException)
+            {
+                return BadRequest(new Message("Dados inválidos"));
+            }
+
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMotor(string id)
         {
-            await _service.DeleteMotorAsync(id);
-            return NoContent();
+            try
+            {
+                await _service.DeleteMotorAsync(id);
+                return NoContent();
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest(new Message("Dados inválidos"));
+            }
+            catch (KeyNotFoundException)
+            {
+                return NotFound(new Message("Dados inválidos"));
+            }
         }
     }
 }

@@ -14,7 +14,15 @@ namespace moto_rent.Services
 
         public async Task<Motor?> GetMotorByIdAsync(string id)
         {
-            return await _repository.GetMotorByIdAsync(string.IsNullOrEmpty(id) ? Guid.Empty : Guid.Parse(id));
+            if (string.IsNullOrEmpty(id))
+                throw new ArgumentException("Id is required");
+
+            var motor = await _repository.GetMotorByIdAsync(id);
+
+            if (motor == null)
+                throw new KeyNotFoundException("id not found");
+                
+            return motor;
         }
 
         public async Task<List<Motor>> GetAllMotorsAsync()
@@ -34,18 +42,16 @@ namespace moto_rent.Services
         public async Task UpdateMotorAsync(string id, string newLicensePlate)
         {
 
-            Guid? motorId = string.IsNullOrEmpty(id) ? (Guid?)null : Guid.Parse(id);
-
-            if(motorId == null)
+            if(id == null)
                 throw new ArgumentException("Id is required");
 
             if (string.IsNullOrWhiteSpace(newLicensePlate))
                 throw new ArgumentException("New license plate is required");
-            
-            var motor = await _repository.GetMotorByIdAsync(motorId.Value);
+
+            var motor = await _repository.GetMotorByIdAsync(id);
 
             if (motor == null)
-                throw new ArgumentException("Id not found");
+                throw new KeyNotFoundException("Id not found");
 
             if (await _repository.GetLicensePlateAsync(newLicensePlate))
                 throw new ArgumentException("License plate already exists");
@@ -56,12 +62,11 @@ namespace moto_rent.Services
 
         public async Task DeleteMotorAsync(string id)
         {
-            Guid? motorId = string.IsNullOrEmpty(id) ? (Guid?)null : Guid.Parse(id);
 
-            if(motorId == null)
+            if(id == null)
                 throw new ArgumentException("Id is required");
-            
-            var motor = await _repository.GetMotorByIdAsync(motorId.Value);
+
+            var motor = await _repository.GetMotorByIdAsync(id);
 
             if (motor == null)
                 throw new ArgumentException("Id not found");
