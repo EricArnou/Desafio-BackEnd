@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using moto_rent.Features.Motors;
 using moto_rent.Services;
 using moto_rent.Infraestructure.Exceptions;
+using moto_rent.Features.Motors.DTOs;
 
 namespace moto_rent.Controllers
 {
@@ -43,19 +44,19 @@ namespace moto_rent.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMotor([FromBody] Motor motor)
+        public async Task<IActionResult> CreateMotor([FromBody] MotorDto motor)
         {
             await _service.CreateMotorAsync(motor);
             return CreatedAtAction(nameof(GetMotor), new { id = motor.Id }, motor);
         }
 
         [HttpPut("{id}/placa")]
-        public async Task<IActionResult> UpdateMotor(string id, [FromBody] string licensePlate)
+        public async Task<IActionResult> UpdateMotor(string id, [FromBody] UpdateMotorDto motor)
         {
 
             try
             {
-                await _service.UpdateMotorAsync(id, licensePlate);
+                await _service.UpdateMotorAsync(id, motor.LicensePlate);
                 return Ok(new Message("Placa modificada com sucesso"));
             }
             catch (ArgumentException)

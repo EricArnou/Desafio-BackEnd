@@ -3,11 +3,13 @@ namespace moto_rent.Features.Motors;
 using moto_rent.Features.Rentals;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using moto_rent.Features.Motors.DTOs;
 
 [Index(nameof(LicensePlate), IsUnique = true)]
 
 public class Motor
-{   
+{
+
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public int Year { get; set; }
@@ -16,4 +18,13 @@ public class Motor
     public bool IsAvailable { get; set; } = true;
 
     public ICollection<Rental> Rentals { get; set; } = new List<Rental>();
+
+    public Motor(MotorDto motor)
+    {
+        this.Id = motor.Id;
+        this.Year = motor.Year;
+        this.Model = motor.Model;
+        this.LicensePlate = motor.LicensePlate;
+    }
+
 }
