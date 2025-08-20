@@ -38,6 +38,9 @@ namespace moto_rent.Services
             if (string.IsNullOrWhiteSpace(motor.placa))
                 throw new ArgumentException("License plate is required");
 
+            if (await _repository.GetLicensePlateAsync(motor.placa))
+                throw new ArgumentException("License plate already exists");
+
             await _repository.AddMotorAsync(Motor.FromDto(motor));
         }
 
@@ -58,7 +61,7 @@ namespace moto_rent.Services
             if (await _repository.GetLicensePlateAsync(newLicensePlate))
                 throw new ArgumentException("License plate already exists");
 
-            motor.LicensePlate = newLicensePlate;
+            motor.SetLicensePlate(newLicensePlate);
             await _repository.UpdateMotorAsync(motor);
         }
 

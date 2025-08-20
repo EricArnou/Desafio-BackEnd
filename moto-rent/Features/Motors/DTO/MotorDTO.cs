@@ -10,6 +10,8 @@ namespace moto_rent.Features.Motors.DTOs
             modelo = motor.Model;
             placa = motor.LicensePlate;
         }
+
+        public MotorDto() {}
         public string identificador { get; set; } = Guid.NewGuid().ToString("N");
         public int ano { get; set; }
         public string modelo { get; set; }
