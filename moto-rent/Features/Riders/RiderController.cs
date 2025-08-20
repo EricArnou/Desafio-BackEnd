@@ -2,13 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using moto_rent.Features.Riders.DTOs;
 using moto_rent.Features.Riders.Services;
 using moto_rent.Infraestructure.Exceptions;
-using System;
-using System.Threading.Tasks;
 
 namespace moto_rent.Features.Riders.Controllers
 {
     [ApiController]
-    [Route("riders")]
+    [Route("entregadores")]
     public class RiderController : ControllerBase
     {
         private readonly RiderService _service;

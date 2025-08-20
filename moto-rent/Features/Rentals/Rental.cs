@@ -16,12 +16,6 @@ public class Rental
     public DateTime StartRentalDate { get; set; }
     public DateTime EndRentalDate { get; set; }
     public DateTime ExpectedRentalEndDate { get; set; }
-    public enum RentalPlans
-    {
-        Weekly = 7,
-        BiWeekly = 15,
-        Monthly = 30,
-        Fortnightly = 45,
-        Fifty = 50
-    }
+    public RentalPlans RentalPlan { get; set; }
+    public decimal TotalPrice { get; set; }
 }
