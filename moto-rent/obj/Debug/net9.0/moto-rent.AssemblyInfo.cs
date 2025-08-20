@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("moto-rent")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c8889636c02ad3f771474b92ec86a715b5847073")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e3de6166b16928cfa883aaac2652a0f1642c2633")]
 [assembly: System.Reflection.AssemblyProductAttribute("moto-rent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("moto-rent")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
