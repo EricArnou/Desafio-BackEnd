@@ -31,10 +31,10 @@ public class Rider
             Id = dto.identificador,
             Name = dto.nome,
             Cnpj = dto.cnpj,
-            BirthDate = dto.dataNascimento,
-            Cnh = dto.cnh,
-            CnhCategory = Enum.Parse<CnhCategory>(dto.CnhCategory),
-            ImageCnh = dto.imagemCnh
+            BirthDate = dto.data_nascimento,
+            Cnh = dto.numero_cnh,
+            CnhCategory = Enum.Parse<CnhCategory>(dto.tipo_cnh),
+            ImageCnh = dto.imagem_cnh
         };
     }
 }
