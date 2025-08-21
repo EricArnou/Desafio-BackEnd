@@ -10,7 +10,6 @@ namespace moto_rent.Features.Riders.Controllers
     public class RiderController : ControllerBase
     {
         private readonly RiderService _service;
-
         public RiderController(RiderService service)
         {
             _service = service;
@@ -21,7 +20,7 @@ namespace moto_rent.Features.Riders.Controllers
         {
             try
             {
-                var rider = await _service.CreateRiderAsync(dto);
+                await _service.CreateRiderAsync(dto);
 
                 return Created();
             }

@@ -11,23 +11,26 @@ namespace moto_rent.Features.Rentals.Services
         private readonly IRentalRepository _rentalRepository;
         private readonly IMotorRepository _motorRepository;
         private readonly IRiderRepository _riderRepository;
+        private readonly ILogger<RentalService> _logger;
         private const decimal WeeklyRentalValue = 30;
         private const decimal BiWeeklyRentalValue = 28;
         private const decimal MonthlyRentalValue = 22;
         private const decimal FortnightlyRentalValue = 20;
         private const decimal FiftyRentalValue = 18;
 
-        public RentalService(IRentalRepository rentalRepository, IMotorRepository motorRepository, IRiderRepository riderRepository)
+        public RentalService(IRentalRepository rentalRepository, IMotorRepository motorRepository, IRiderRepository riderRepository, ILogger<RentalService> logger)
         {
             _rentalRepository = rentalRepository;
             _motorRepository = motorRepository;
             _riderRepository = riderRepository;
+            _logger = logger;
         }
 
         public async Task<GetRentalDto> GetRentalByIdAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
+                _logger.LogError("Invalid rental id: {Id}", id);
                 throw new ArgumentException("id is required");
             }
 
@@ -35,13 +38,14 @@ namespace moto_rent.Features.Rentals.Services
             
             if (rental == null)
             {
+                _logger.LogError("Rental not found with id: {Id}", id);
                 throw new KeyNotFoundException("id not found");
             }
 
             return new GetRentalDto(rental);
         }
 
-        public async Task<RentalDto> CreateRentalAsync(CreateRentalDto rentalDto)
+        public async Task CreateRentalAsync(CreateRentalDto rentalDto)
         {
             var rental = Rental.FromDto(rentalDto);
 
@@ -49,11 +53,13 @@ namespace moto_rent.Features.Rentals.Services
 
             if (motor == null)
             {
+                _logger.LogError("Motor not found for the given moto_id: {MotoId}", rentalDto.moto_id);
                 throw new ArgumentException("Motor not found for the given moto_id.");
             }
 
             if(motor.IsAvailable == false)
             {
+                _logger.LogError("Motor with id {Id} is not available for rental", motor.Id);
                 throw new ArgumentException("Motor is not available for rental.");
             }
 
@@ -63,11 +69,13 @@ namespace moto_rent.Features.Rentals.Services
 
             if (rider == null)
             {
+                _logger.LogError("Rider not found for the given entregador_id: {EntregadorId}", rentalDto.entregador_id);
                 throw new ArgumentException("Rider not found for the given entregador_id.");
             }
 
             if(rider.CnhCategory != CnhCategory.A)
             {
+                _logger.LogError("Rider is not allowed to rent this motor: {RiderId}", rider.Id);
                 throw new ArgumentException("Rider is not allowed to rent this motor.");
             }
 
@@ -75,8 +83,9 @@ namespace moto_rent.Features.Rentals.Services
 
             await _rentalRepository.CreateRentalAsync(rental);
 
+            _logger.LogInformation("Rental created with id {Id}", rental.Id);
+
             rental.Motor.SetAvailability(false);
-            return new RentalDto(rental);
         }
 
         public async Task UpdateRentalAsync(string id, UpdateRentalDto rental)
@@ -85,17 +94,20 @@ namespace moto_rent.Features.Rentals.Services
 
             if (existing == null)
             {
+                _logger.LogError("Rental not found with id: {Id}", id);
                 throw new ArgumentException("Rental not found");
             }
 
             if (rental.data_devolucao.HasValue)
             {
+                _logger.LogInformation("Updating rental return date for rental id: {Id}", id);
                 existing.RentalReturnDate = (DateTime)rental.data_devolucao;
             }
 
             existing.TotalPrice = CalculateRentalPrice(existing);
             existing.Motor.SetAvailability(true);
             await _rentalRepository.UpdateRentalAsync(existing);
+            _logger.LogInformation("Rental with id {Id} updated", id);
         }
 
         public decimal CalculateRentalPrice(Rental rental)
