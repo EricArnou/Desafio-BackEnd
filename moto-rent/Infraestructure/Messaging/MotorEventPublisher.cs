@@ -1,4 +1,4 @@
-using moto_rent.Features.Motors;
+using moto_rent.Features.Motors.DTOs;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
@@ -21,7 +21,7 @@ public class MotoEventPublisher
                              arguments: null);
     }
 
-    public void PublishMotoCadastrada(Motor moto)
+    public void PublishMotoCadastrada(MotorDto moto)
     {
         var message = JsonSerializer.Serialize(moto);
         var body = Encoding.UTF8.GetBytes(message);

@@ -42,7 +42,7 @@ namespace moto_rent.Services
 
             var motorEntity = Motor.FromDto(motor);
             await _repository.AddMotorAsync(motorEntity);
-            _eventPublisher.PublishMotoCadastrada(motorEntity);
+            _eventPublisher.PublishMotoCadastrada(motor);
 
         }
 
