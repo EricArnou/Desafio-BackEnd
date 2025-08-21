@@ -1,22 +1,15 @@
-# Use the official .NET 9 SDK image for build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-WORKDIR /src
+WORKDIR /app
 
-# Copia csproj e restaura dependências
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copia o restante do código e publica
 COPY . ./
-RUN dotnet publish -c Release -o /app
+RUN dotnet publish -c Release -o out
 
-# Cria imagem de runtime
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build /app/out ./
 
-# Porta da API
-EXPOSE 80
-
-# Comando para rodar a aplicação
+EXPOSE 5000
 ENTRYPOINT ["dotnet", "moto-rent.dll"]

@@ -5,29 +5,29 @@ using System.Text.Json;
 
 public class MotoEventPublisher
 {
-    private readonly IConnection _connection;
-    private readonly IModel _channel;
+    private const string QueueName = "moto.cadastrada";
 
-    public MotoEventPublisher()
+    public void PublishMotoCadastrada(MotorDto moto)
     {
-        var factory = new ConnectionFactory() { HostName = "localhost" };
-        _connection = factory.CreateConnection();
-        _channel = _connection.CreateModel();
+        var factory = new ConnectionFactory() { HostName = "rabbitmq" };
 
-        _channel.QueueDeclare(queue: "moto.cadastrada",
+        // Cria conexão e canal somente aqui
+        using var connection = factory.CreateConnection();
+        using var channel = connection.CreateModel();
+
+        // Declara fila
+        channel.QueueDeclare(queue: QueueName,
                              durable: false,
                              exclusive: false,
                              autoDelete: false,
                              arguments: null);
-    }
 
-    public void PublishMotoCadastrada(MotorDto moto)
-    {
+        // Serializa e envia mensagem
         var message = JsonSerializer.Serialize(moto);
         var body = Encoding.UTF8.GetBytes(message);
 
-        _channel.BasicPublish(exchange: "",
-                             routingKey: "moto.cadastrada",
+        channel.BasicPublish(exchange: "",
+                             routingKey: QueueName,
                              basicProperties: null,
                              body: body);
     }

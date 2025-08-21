@@ -1,29 +1,61 @@
-version: '3.8'
 
 services:
-  db:
-    image: postgres:15
-    container_name: motorent-db
+  postgres-api:
+    image: postgres:16
+    container_name: postgres-api
     environment:
-      POSTGRES_DB: motorentdb
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: motorentdb
     ports:
       - "5432:5432"
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - motorent-network
+
+  postgres-consumer:
+    image: postgres:16
+    container_name: postgres-consumer
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: consumerdb
+    ports:
+      - "5433:5432"
+    networks:
+      - motorent-network
 
   rabbitmq:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
       - "5672:5672"
-      - "15672:15672" # painel de administração
+      - "15672:15672"
     networks:
       - motorent-network
 
-volumes:
-  postgres-data:
+  moto-rent-api:
+    build: ./moto-rent
+    container_name: moto-rent-api
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres-api;Port=5432;Database=motorentdb;Username=postgres;Password=postgres
+    depends_on:
+      - postgres-api
+      - rabbitmq
+    ports:
+      - "5000:5000" # HTTP
+    networks:
+      - motorent-network
+
+  moto-rent-consumer:
+    build: ./moto-rent-consumer
+    container_name: moto-rent-consumer
+    environment:
+          - ConnectionStrings__DefaultConnection=Host=postgres-consumer;Port=5432;Database=consumerdb;Username=postgres;Password=postgres
+    depends_on:
+      - postgres-consumer
+      - rabbitmq
+    networks:
+      - motorent-network
 
 networks:
   motorent-network:

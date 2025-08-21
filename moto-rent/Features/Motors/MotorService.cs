@@ -6,11 +6,12 @@ namespace moto_rent.Services
     public class MotorService
     {
         private readonly IMotorRepository _repository;
-        private readonly MotoEventPublisher _eventPublisher = new MotoEventPublisher();
+        private readonly MotoEventPublisher _eventPublisher;
 
-        public MotorService(IMotorRepository repository)
+        public MotorService(IMotorRepository repository, MotoEventPublisher eventPublisher)
         {
             _repository = repository;
+            _eventPublisher = eventPublisher;
         }
 
         public async Task<MotorDto?> GetMotorByIdAsync(string id)

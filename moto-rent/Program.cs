@@ -26,22 +26,52 @@ builder.Services.AddScoped<RentalService>();
 
 builder.Services.AddScoped<IMotorRepository, MotorRepository>();
 builder.Services.AddScoped<MotorService>();
-
+builder.Services.AddSingleton<MotoEventPublisher>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+// --- Lógica de Retentativa para Migração do Banco de Dados ---
+using (var scope = app.Services.CreateScope())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    int attempts = 0;
+    const int maxAttempts = 10;
+    const int delayInSeconds = 5;
+
+    while (attempts < maxAttempts)
+    {
+        try
+        {
+            Console.WriteLine($"Tentativa {attempts + 1}/{maxAttempts} - Aplicando migrações no banco de dados...");
+            db.Database.Migrate();
+            Console.WriteLine("Migração do banco de dados concluída com sucesso.");
+            break; // Sai do loop se a migração for bem-sucedida
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Falha ao aplicar as migrações. Tentando novamente em {delayInSeconds}s... Erro: {ex.Message}");
+            attempts++;
+            if (attempts == maxAttempts)
+            {
+                Console.WriteLine("Número máximo de tentativas alcançado. Não foi possível conectar ao banco de dados.");
+                throw; // Lança a exceção para parar a aplicação
+            }
+            Thread.Sleep(TimeSpan.FromSeconds(delayInSeconds));
+        }
+    }
 }
+// --- Fim da Lógica de Retentativa ---
 
-app.Urls.Add("http://localhost:5000");
-app.Urls.Add("https://localhost:5001");
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Moto Rent API V1");
+});
 
-app.UseHttpsRedirection();
+app.Urls.Add("http://0.0.0.0:5000");
 app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
