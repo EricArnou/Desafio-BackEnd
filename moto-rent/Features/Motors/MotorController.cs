@@ -10,10 +10,12 @@ namespace moto_rent.Controllers
     public class MotorsController : ControllerBase
     {
         private readonly MotorService _service;
+        private readonly ILogger<MotorsController> _logger;
 
-        public MotorsController(MotorService service)
+        public MotorsController(MotorService service, ILogger<MotorsController> logger)
         {
             _service = service;
+            _logger = logger;
         }
 
         [HttpGet("{id}")]
@@ -26,11 +28,13 @@ namespace moto_rent.Controllers
             }
             catch (ArgumentException)
             {
+                _logger.LogError("Invalid request for motor with id {Id}", id);
                 return BadRequest(new Message("Request mal formada"));
             }
             catch (KeyNotFoundException)
             {
-                return NotFound(new Message("Moto não encontrado"));
+                _logger.LogError("Motor not found with id {Id}", id);
+                return NotFound(new Message("Moto não encontrada"));
             }
         }
 
@@ -51,6 +55,7 @@ namespace moto_rent.Controllers
             }
             catch (ArgumentException)
             {
+                _logger.LogError("Invalid data for motor creation: {Motor}", motor);
                 return BadRequest(new Message("Dados inválidos"));
             }
         }
@@ -66,11 +71,13 @@ namespace moto_rent.Controllers
             }
             catch (ArgumentException)
             {
+                _logger.LogError("Invalid data for motor update: {Motor}", motor);
                 return BadRequest(new Message("Dados inválidos"));
             }
             catch (KeyNotFoundException)
             {
-                return BadRequest(new Message("Dados inválidos"));
+                _logger.LogError("Motor not found with id {Id}", id);
+                return NotFound(new Message("Moto não encontrada"));
             }
 
         }
@@ -85,11 +92,13 @@ namespace moto_rent.Controllers
             }
             catch (ArgumentException)
             {
+                _logger.LogError("Invalid data for motor deletion: {Id}", id);
                 return BadRequest(new Message("Dados inválidos"));
             }
             catch (KeyNotFoundException)
             {
-                return NotFound(new Message("Dados inválidos"));
+                _logger.LogError("Motor not found with id {Id}", id);
+                return NotFound(new Message("Moto não encontrada"));
             }
         }
     }

@@ -7,11 +7,14 @@ namespace moto_rent.Services
     {
         private readonly IMotorRepository _repository;
         private readonly MotoEventPublisher _eventPublisher;
+        private readonly ILogger<MotorService> _logger;
 
-        public MotorService(IMotorRepository repository, MotoEventPublisher eventPublisher)
+
+        public MotorService(IMotorRepository repository, MotoEventPublisher eventPublisher, ILogger<MotorService> logger)
         {
             _repository = repository;
             _eventPublisher = eventPublisher;
+            _logger = logger;
         }
 
         public async Task<MotorDto?> GetMotorByIdAsync(string id)
@@ -44,13 +47,13 @@ namespace moto_rent.Services
             var motorEntity = Motor.FromDto(motor);
             await _repository.AddMotorAsync(motorEntity);
             _eventPublisher.PublishMotoCadastrada(motor);
-
+            _logger.LogInformation("Motor with id {Id} created", motor.identificador);
         }
 
         public async Task UpdateMotorAsync(string id, string newLicensePlate)
         {
 
-            if(id == null)
+            if (id == null)
                 throw new ArgumentException("Id is required");
 
             if (string.IsNullOrWhiteSpace(newLicensePlate))
@@ -66,12 +69,13 @@ namespace moto_rent.Services
 
             motor.SetLicensePlate(newLicensePlate);
             await _repository.UpdateMotorAsync(motor);
+            _logger.LogInformation("Motor with id {Id} updated with new license plate {NewLicensePlate}", id, newLicensePlate);
         }
 
         public async Task DeleteMotorAsync(string id)
         {
 
-            if(id == null)
+            if (id == null)
                 throw new ArgumentException("Id is required");
 
             var motor = await _repository.GetMotorByIdAsync(id);
@@ -82,6 +86,7 @@ namespace moto_rent.Services
             if (motor == null) throw new KeyNotFoundException("Motor not found");
 
             await _repository.DeleteMotorAsync(motor);
+            _logger.LogInformation("Motor with id {Id} deleted", id);
         }
     }
 }
