@@ -6,6 +6,7 @@ namespace moto_rent.Services
     public class MotorService
     {
         private readonly IMotorRepository _repository;
+        private readonly MotoEventPublisher _eventPublisher = new MotoEventPublisher();
 
         public MotorService(IMotorRepository repository)
         {
@@ -41,6 +42,7 @@ namespace moto_rent.Services
 
             var motorEntity = Motor.FromDto(motor);
             await _repository.AddMotorAsync(motorEntity);
+            _eventPublisher.PublishMotoCadastrada(motorEntity);
 
         }
 
