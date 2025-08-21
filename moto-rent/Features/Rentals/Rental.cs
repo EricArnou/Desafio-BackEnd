@@ -1,7 +1,6 @@
 using moto_rent.Features.Motors;
 using moto_rent.Features.Riders;
 using moto_rent.Features.Riders.DTOs;
-using moto_rent.Persistence;
 
 namespace moto_rent.Features.Rentals;
 
