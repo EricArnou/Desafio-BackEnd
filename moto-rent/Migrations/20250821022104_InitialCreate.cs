@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -35,7 +34,9 @@ namespace moto_rent.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Cnpj = table.Column<string>(type: "text", nullable: false),
                     BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Cnh = table.Column<string>(type: "text", nullable: false)
+                    Cnh = table.Column<string>(type: "text", nullable: false),
+                    CnhCategory = table.Column<int>(type: "integer", nullable: false),
+                    ImageCnh = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -46,13 +47,15 @@ namespace moto_rent.Migrations
                 name: "Rentals",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<string>(type: "text", nullable: false),
                     RiderId = table.Column<string>(type: "text", nullable: false),
                     MotorId = table.Column<string>(type: "text", nullable: false),
                     StartRentalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     EndRentalDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ExpectedRentalEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    ExpectedRentalEndDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RentalReturnDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    RentalPlan = table.Column<int>(type: "integer", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {

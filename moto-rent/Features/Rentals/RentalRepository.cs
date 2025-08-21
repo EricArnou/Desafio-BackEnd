@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using moto_rent.Persistence;
 
 namespace moto_rent.Features.Rentals
@@ -19,7 +20,10 @@ namespace moto_rent.Features.Rentals
 
         public async Task<Rental?> GetRentalByIdAsync(string id)
         {
-            return await _context.Rentals.FindAsync(id);
+            return await _context.Rentals
+                .Include(r => r.Rider)
+                .Include(r => r.Motor)  
+                .FirstOrDefaultAsync(r => r.Id == id);
         }
 
         public async Task CreateRentalAsync(Rental rental)

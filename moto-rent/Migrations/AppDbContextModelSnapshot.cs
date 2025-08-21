@@ -51,11 +51,8 @@ namespace moto_rent.Migrations
 
             modelBuilder.Entity("moto_rent.Features.Rentals.Rental", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("EndRentalDate")
                         .HasColumnType("timestamp with time zone");
@@ -69,6 +66,9 @@ namespace moto_rent.Migrations
 
                     b.Property<int>("RentalPlan")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("RentalReturnDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("RiderId")
                         .IsRequired()

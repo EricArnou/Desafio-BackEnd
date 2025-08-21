@@ -11,6 +11,11 @@ namespace moto_rent.Features.Rentals.Services
         private readonly IRentalRepository _rentalRepository;
         private readonly IMotorRepository _motorRepository;
         private readonly IRiderRepository _riderRepository;
+        private const decimal WeeklyRentalValue = 30;
+        private const decimal BiWeeklyRentalValue = 28;
+        private const decimal MonthlyRentalValue = 22;
+        private const decimal FortnightlyRentalValue = 20;
+        private const decimal FiftyRentalValue = 18;
 
         public RentalService(IRentalRepository rentalRepository, IMotorRepository motorRepository, IRiderRepository riderRepository)
         {
@@ -19,7 +24,7 @@ namespace moto_rent.Features.Rentals.Services
             _riderRepository = riderRepository;
         }
 
-        public async Task<RentalDto> GetRentalByIdAsync(string id)
+        public async Task<GetRentalDto> GetRentalByIdAsync(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -33,7 +38,7 @@ namespace moto_rent.Features.Rentals.Services
                 throw new KeyNotFoundException("id not found");
             }
 
-            return new RentalDto(rental);
+            return new GetRentalDto(rental);
         }
 
         public async Task<RentalDto> CreateRentalAsync(CreateRentalDto rentalDto)
@@ -61,6 +66,11 @@ namespace moto_rent.Features.Rentals.Services
                 throw new ArgumentException("Rider not found for the given entregador_id.");
             }
 
+            if(rider.CnhCategory != CnhCategory.A)
+            {
+                throw new ArgumentException("Rider is not allowed to rent this motor.");
+            }
+
             rental.Rider = rider;
 
             await _rentalRepository.CreateRentalAsync(rental);
@@ -69,7 +79,7 @@ namespace moto_rent.Features.Rentals.Services
             return new RentalDto(rental);
         }
 
-        public async Task<RentalDto?> UpdateRentalAsync(string id, UpdateRentalDto rental)
+        public async Task UpdateRentalAsync(string id, UpdateRentalDto rental)
         {
             var existing = await _rentalRepository.GetRentalByIdAsync(id);
 
@@ -78,15 +88,14 @@ namespace moto_rent.Features.Rentals.Services
                 throw new ArgumentException("Rental not found");
             }
 
-            if (rental.data_termino.HasValue)
+            if (rental.data_devolucao.HasValue)
             {
-                existing.EndRentalDate = rental.data_termino.Value;
+                existing.RentalReturnDate = (DateTime)rental.data_devolucao;
             }
 
             existing.TotalPrice = CalculateRentalPrice(existing);
+            existing.Motor.SetAvailability(true);
             await _rentalRepository.UpdateRentalAsync(existing);
-
-            return new RentalDto(existing);
         }
 
         public decimal CalculateRentalPrice(Rental rental)
@@ -94,36 +103,48 @@ namespace moto_rent.Features.Rentals.Services
 
             decimal price = 0;
 
-            switch (rental.RentalPlan)
+            if (rental.RentalReturnDate.Date >= rental.ExpectedRentalEndDate.Date)
+            {
+
+                switch (rental.RentalPlan)
                 {
                     case RentalPlans.Weekly:
-                        price = 30 * (decimal)(rental.EndRentalDate - rental.StartRentalDate.AddDays(1)).TotalDays;
+                        price = WeeklyRentalValue * (decimal)RentalPlans.Weekly;
                         break;
                     case RentalPlans.BiWeekly:
-                        price = 28 * (decimal)(rental.EndRentalDate - rental.StartRentalDate.AddDays(1)).TotalDays;
+                        price = BiWeeklyRentalValue * (decimal)RentalPlans.BiWeekly;
                         break;
                     case RentalPlans.Monthly:
-                        price = 22 * (decimal)(rental.EndRentalDate - rental.StartRentalDate.AddDays(1)).TotalDays;
+                        price = MonthlyRentalValue * (decimal)RentalPlans.Monthly;
                         break;
                     case RentalPlans.Fortnightly:
-                        price = 20 * (decimal)(rental.EndRentalDate - rental.StartRentalDate.AddDays(1)).TotalDays;
+                        price = FortnightlyRentalValue * (decimal)RentalPlans.Fortnightly;
                         break;
                     case RentalPlans.Fifty:
-                        price = 18 * (decimal)(rental.EndRentalDate - rental.StartRentalDate.AddDays(1)).TotalDays;
+                        price = FiftyRentalValue * (decimal)RentalPlans.Fifty;
                         break;
                 }
-
-            if (rental.EndRentalDate < rental.ExpectedRentalEndDate)
-            {
-                if (rental.RentalPlan == RentalPlans.Weekly)
-                    price += (decimal)(0.2 * ((rental.ExpectedRentalEndDate - rental.EndRentalDate).TotalDays * 30));
-
-                if (rental.RentalPlan == RentalPlans.BiWeekly)
-                    price += (decimal)(0.4 * ((rental.ExpectedRentalEndDate - rental.EndRentalDate).TotalDays * 28));
             }
-            else if (rental.EndRentalDate > rental.ExpectedRentalEndDate)
+
+            if (rental.RentalReturnDate.Date < rental.ExpectedRentalEndDate.Date)
             {
-                price += 50 * (decimal)(rental.EndRentalDate - rental.ExpectedRentalEndDate).TotalDays;
+                var rentedDays = Math.Max(1, (rental.RentalReturnDate.Date - rental.StartRentalDate.Date).Days + 1);
+                var remainingDays = Math.Max(0, (rental.ExpectedRentalEndDate.Date - rental.RentalReturnDate.Date).Days);
+
+                switch (rental.RentalPlan)
+                {
+                    case RentalPlans.Weekly:
+                        price = (WeeklyRentalValue * rentedDays) + (WeeklyRentalValue * 0.2m * remainingDays);
+                        break;
+                    case RentalPlans.BiWeekly:
+                        price = (BiWeeklyRentalValue * rentedDays) + (BiWeeklyRentalValue * 0.4m * remainingDays);
+                        break;
+                }
+            }
+            else if (rental.RentalReturnDate.Date > rental.ExpectedRentalEndDate.Date)
+            {
+                var additionalRentedDays = (rental.RentalReturnDate.Date - rental.ExpectedRentalEndDate.Date).TotalDays;
+                price += 50 * (decimal)additionalRentedDays;
             }
 
             return price;

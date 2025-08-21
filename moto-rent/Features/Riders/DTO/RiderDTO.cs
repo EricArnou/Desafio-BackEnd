@@ -1,3 +1,5 @@
+using moto_rent.Features.Rentals;
+
 namespace moto_rent.Features.Riders.DTOs
 {
     public class RiderDto

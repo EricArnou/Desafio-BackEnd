@@ -12,8 +12,8 @@ using moto_rent.Persistence;
 namespace moto_rent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250820033623_AddCnhCategoryToRider")]
-    partial class AddCnhCategoryToRider
+    [Migration("20250821022104_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,11 +54,8 @@ namespace moto_rent.Migrations
 
             modelBuilder.Entity("moto_rent.Features.Rentals.Rental", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("EndRentalDate")
                         .HasColumnType("timestamp with time zone");
@@ -70,12 +67,21 @@ namespace moto_rent.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<int>("RentalPlan")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("RentalReturnDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("RiderId")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("StartRentalDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("numeric");
 
                     b.HasKey("Id");
 

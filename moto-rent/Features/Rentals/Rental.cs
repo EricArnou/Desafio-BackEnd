@@ -18,6 +18,7 @@ public class Rental
     public DateTime StartRentalDate { get; set; }
     public DateTime EndRentalDate { get; set; }
     public DateTime ExpectedRentalEndDate { get; set; }
+    public DateTime RentalReturnDate { get; set; }
     public RentalPlans RentalPlan { get; set; }
     public decimal TotalPrice { get; set; }
 
@@ -29,7 +30,7 @@ public class Rental
             MotorId = dto.moto_id,
             StartRentalDate = dto.data_inicio,
             EndRentalDate = dto.data_termino,
-            ExpectedRentalEndDate = dto.data_prevista_termino,
+            ExpectedRentalEndDate = dto.data_previsao_termino,
             RentalPlan = (RentalPlans)dto.plano
         };
     }

@@ -5,9 +5,9 @@ namespace moto_rent.Services
 {
     public class MotorService
     {
-        private readonly MotorRepository _repository;
+        private readonly IMotorRepository _repository;
 
-        public MotorService(MotorRepository repository)
+        public MotorService(IMotorRepository repository)
         {
             _repository = repository;
         }
