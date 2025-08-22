@@ -15,6 +15,11 @@ namespace moto_rent.Features.Riders.Controllers
             _service = service;
         }
 
+        /// <summary>
+        /// Cadastra um novo entregador
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> CreateRider([FromBody] RiderDto dto)
         {

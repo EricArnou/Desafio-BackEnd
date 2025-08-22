@@ -16,6 +16,12 @@ namespace moto_rent.Features.Rentals.Controllers
             _rentalService = rentalService;
         }
 
+        /// <summary>
+        /// Consulta uma locação pelo ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetRentalById(string id)
         {
@@ -35,6 +41,12 @@ namespace moto_rent.Features.Rentals.Controllers
             }
         }
 
+        /// <summary>
+        /// Cria uma nova locação
+        /// </summary>
+        /// <param name="rental"></param>
+        /// <returns></returns>
+
         [HttpPost]
         public async Task<IActionResult> CreateRental([FromBody] CreateRentalDto rental)
         {
@@ -48,6 +60,13 @@ namespace moto_rent.Features.Rentals.Controllers
                 return BadRequest(new Message("Dados inválidos"));
             }
         }
+
+        /// <summary>
+        /// Informa a data de devolução de uma locação existente
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="rental"></param>
+        /// <returns></returns>
 
         [HttpPut("{id}/devolucao")]
         public async Task<IActionResult> UpdateRental(string id, [FromBody] UpdateRentalDto rental)

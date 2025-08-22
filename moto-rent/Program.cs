@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using moto_rent.Features.Motors;
 using moto_rent.Features.Rentals;
@@ -17,7 +18,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // Adiciona uma descrição geral da API
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Title = "Moto Rent API",
+        Version = "v1",
+        Description = "API para gerenciamento de aluguel de motos, pilotos e entregas."
+    });
+
+    // Configura o Swagger para usar os comentários XML
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 builder.Services.AddScoped<IRiderRepository, RiderRepository>();
 builder.Services.AddScoped<RiderService>();
 
@@ -27,6 +41,7 @@ builder.Services.AddScoped<RentalService>();
 builder.Services.AddScoped<IMotorRepository, MotorRepository>();
 builder.Services.AddScoped<MotorService>();
 builder.Services.AddSingleton<MotoEventPublisher>();
+builder.Services.AddLogging();
 
 var app = builder.Build();
 
